@@ -35,11 +35,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['id','title','description','status','created_at','updated_at']
-        read_only_fields = ['id','created_at','updated_at']
-    
+        fields = ['id', 'title', 'description', 'status', 'created_at', 'updated_at', 'user']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'user']
+
     def validate_title(self, value):
         if not value:
             raise serializers.ValidationError("Title cannot be empty")
         return value
+
 

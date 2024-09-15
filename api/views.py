@@ -11,25 +11,35 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
+    
+
 
 #to list and create task
 class TaskListCreateView(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]  # Enable search functionality
     search_fields = ['title'] 
 
     def get_queryset(self):
-        queryset = Task.objects.all()
-        # Filter by status (completed or pending)
+        # Filter tasks to only show tasks created by the currently logged-in user
+        queryset = Task.objects.filter(user=self.request.user).order_by('-updated_at')
+
+        #Filter by status (completed or pending)
         status = self.request.query_params.get('status')
         if status is not None:
             queryset = queryset.filter(status=(status.lower() == 'true'))
+        
         return queryset
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-#to delete and update task
-class TaskDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Task.objects.all()
-    permission_classes = [IsAuthenticated]
+
+#task details
+class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)

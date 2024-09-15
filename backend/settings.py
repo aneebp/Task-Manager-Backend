@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',  # To handle CORS between frontend and backend
-    'api',  # Replace with your app name where Task model is created
+    'api', 
 ]
 
 MIDDLEWARE = [
@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
     ),
     #Django REST Framework's built-in PageNumberPagination will paginate your task list by the specified number of results per page.
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10, 
+    'PAGE_SIZE': 3, 
 }
 
 
